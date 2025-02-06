@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}{{ event.name }} - Coulomb{% endblock %}
+
+{% block content %}
+<br><br><br>
+<section class="page-section bg-light py-5" id="event-details">
+    <div class="container">
+        <!-- Event Title -->
+        <h2 class="text-center text-uppercase text-secondary mb-4">{{ event.name }}</h2>
+        
+        <!-- Icon Divider -->
+        <div class="divider-custom">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><i class="fas fa-calendar-check"></i></div>
+            <div class="divider-custom-line"></div>
+        </div>
+
+        <!-- Event Image -->
+       
+
+        <!-- Event Details -->
+        <div class="row">
+            <div class="col-md-8">
+                <h4 class="text-primary">About the Event</h4>
+                <p>{{ event.description }}</p>
+
+                <h4 class="text-primary mt-4">Rules & Regulations</h4>
+                <!-- <ul>
+                    {% for rule in event.rules.all %}
+                        <li>{{ rule.text }}</li>
+                    {% endfor %}
+                </ul> -->
+                <p>{{ event.rules_and_regulations|linebreaks }}</p>
+            </div>
+
+            <!-- Event Info Sidebar -->
+            <div class="col-md-4">
+                <div class="event-info-box p-4 bg-white shadow rounded">
+                    <h5 class="text-secondary">Event Details</h5>
+                    <p><strong>Date:</strong> {{ event.date }}</p>
+                    <p><strong>Time:</strong> {{ event.time }}</p>
+                    <p><strong>Venue:</strong> {{ event.venue }}</p>
+                    <p><strong>Entry Fee:</strong> 150</p>
+
+                    <h5 class="text-secondary mt-4">Contact</h5>
+                    <p><strong>Organizer:</strong> {{ event.organizer }}</p>
+                    <p><strong>Email:</strong> <a href="mailto:{{ event.contact_email }}">{{ event.contact_email }}</a></p>
+                    <p><strong>Phone:</strong> <a href="tel:{{ event.contact_phone }}">{{ event.contact_phone }}</a></p>
+
+                    <!-- Registration Button -->
+                    <div class="text-center mt-4">
+                        <a href="#" class="btn btn-primary">Register Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

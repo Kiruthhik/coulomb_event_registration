@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% load socialaccount %}  <!-- Required for Google Sign In -->
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<br><br><br>
+<div class="container mt-5">
+    <h2 class="text-center">Participant Registration</h2>
+
+    <p class="text-center">
+        Please sign up with Google to continue.
+    </p>
+
+    <!-- Google Signup Button -->
+    <div class="text-center">
+        <a href="{% provider_login_url 'google' %}?next=/profile/edit/" class="btn btn-danger">
+            <i class="fab fa-google"></i> Sign Up with Google
+        </a>
+    </div>
+</div>
+{% endblock %}
