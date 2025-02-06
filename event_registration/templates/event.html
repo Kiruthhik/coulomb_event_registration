@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
-
+{% load socialaccount %}
 {% block title %}{{ event.name }} - Coulomb{% endblock %}
 
 {% block content %}
@@ -41,7 +41,7 @@
                     <h5 class="text-secondary">Event Details</h5>
                     <p><strong>Date:</strong> {{ event.date }}</p>
                     <p><strong>Time:</strong> {{ event.time }}</p>
-                    <p><strong>Venue:</strong> {{ event.venue }}</p>
+                    <p><strong>Venue:</strong> Notified</p>
                     <p><strong>Entry Fee:</strong> 150</p>
 
                     <h5 class="text-secondary mt-4">Contact</h5>
@@ -51,7 +51,7 @@
 
                     <!-- Registration Button -->
                     <div class="text-center mt-4">
-                        <a href="#" class="btn btn-primary">Register Now</a>
+                        <a href="{% provider_login_url 'google' %}?next=/profile/edit/" class="btn btn-primary">Register Now</a>
                     </div>
                 </div>
             </div>

@@ -25,37 +25,44 @@
     </header>
 
     <!-- Portfolio Section -->
-    <section class="page-section portfolio" id="about">
-        <div class="container">
-            <!-- Portfolio Section Heading -->
-            <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">About</h2>
-            <!-- Icon Divider -->
-            <div class="divider-custom">
-                <div class="divider-custom-line"></div>
-                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                <div class="divider-custom-line"></div>
-            </div>
-            <!-- Portfolio Grid Items -->
-            <div class="row justify-content-center">
-                <!-- Portfolio Item 1 -->
-                <div class="col-md-6 col-lg-4 mb-5">
-                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
-                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                            <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                        </div>
-                        <img class="img-fluid" src="{% static 'assets/img/portfolio/cabin.png' %}" alt="..." />
-                    </div>
-                </div>
-                <!-- Portfolio Item 2 -->
-                <div class="col-md-6 col-lg-4 mb-5">
-                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal2">
-                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                            <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                        </div>
-                        <img class="img-fluid" src="{% static 'assets/img/portfolio/cake.png' %}" alt="..." />
-                    </div>
+    <!-- About Section -->
+<section class="page-section bg-light text-dark" id="about">
+    <div class="container">
+        <!-- Section Heading -->
+        <h2 class="page-section-heading text-center text-uppercase text-primary mb-4">About Coulomb</h2>
+        <!-- Icon Divider -->
+        <div class="divider-custom">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><i class="fas fa-bolt text-warning"></i></div>
+            <div class="divider-custom-line"></div>
+        </div>
+
+        <!-- About Content -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0 rounded-lg p-4">
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="fas fa-trophy text-warning"></i>
+                            <strong>COULOMB</strong> is a National Level Symposium conducted annually by the 
+                            <strong>EEE Department of REC</strong>, bringing together tech enthusiasts from across the country.
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-ticket-alt text-success"></i>
+                            Participants can <strong>purchase a coupon</strong> and join multiple events without extra charges.
+                            <br>
+                            <a href="#" class="btn btn-sm btn-primary mt-2">Purchase Coupon</a>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-users text-danger"></i>
+                            For <strong>team events</strong>, only one member needs to purchase the coupon and 
+                            register by providing their teammates' details.
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 {% endblock %}
