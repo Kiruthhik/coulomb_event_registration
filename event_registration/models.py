@@ -15,6 +15,8 @@ class Participant(models.Model):
         ('4', '4th Year'),
     ]
     year_of_study = models.CharField(max_length=1, choices=YEAR_CHOICES)
+    coupon_purchased = models.BooleanField(default=False)
+    attendance = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.register_number}"
@@ -28,14 +30,24 @@ class event(models.Model):
     rules_and_regulations = models.TextField(null=True,blank=True)
     venue = models.CharField(max_length=100,null=True,blank=True)
     image = models.ImageField(upload_to='event_registration/images',null=True,blank=True)
-
+    participants = models.ManyToManyField(Participant,related_name='events',blank=True)
+    team_size = models.IntegerField(null=True,blank=True)
     def __str__(self):
         return self.name
     
 class organizer(models.Model):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=10)
-    event = models.ForeignKey(event,on_delete=models.CASCADE)
+    event = models.ForeignKey(event,on_delete=models.CASCADE,related_name='organizers')
+
+    def __str__(self):
+        return self.name
+    
+class teammate(models.Model):
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=10)
+    event = models.ForeignKey(event,on_delete=models.CASCADE,related_name='teammates')
+    team_of = models.ForeignKey(Participant,on_delete=models.CASCADE,related_name='teammates')
 
     def __str__(self):
         return self.name

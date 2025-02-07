@@ -5,6 +5,36 @@
 
 {% block content %}
 <br><br><br>
+<!-- Registration Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel">Register for {{ event.name }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="participantName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="participantName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="participantPhone" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="participantPhone" name="phone" required>
+                    </div>
+                    <input type="hidden" id="eventId" value="{{ event.id }}">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="skipBtn" data-bs-dismiss="modal">Skip</button>
+                <button type="button" class="btn btn-primary" id="addParticipant">Add Participant 1</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="page-section bg-light py-5" id="event-details">
     <div class="container">
         <!-- Event Title -->
@@ -34,6 +64,8 @@
                 </ul> -->
                 <p>{{ event.rules_and_regulations|linebreaks }}</p>
             </div>
+            <input type="hidden" id="currentCount" value="1">
+            <input type="hidden" id="teamSize" value="{{ event.team_size }}">
 
             <!-- Event Info Sidebar -->
             <div class="col-md-4">
@@ -51,7 +83,16 @@
 
                     <!-- Registration Button -->
                     <div class="text-center mt-4">
-                        <a href="{% provider_login_url 'google' %}?next=/profile/edit/" class="btn btn-primary">Register Now</a>
+                        {% if user.is_authenticated %}
+                    <!-- Button to trigger modal -->
+                            <button class="btn btn-primary" id="openRegisterModal" data-bs-toggle="modal" data-bs-target="#registerModal">
+                                Register
+                            </button>
+                        {% else %}
+                            <a href="{% provider_login_url 'google' %}?next={% url 'register' event.id %}" class="btn btn-primary">
+                                Register Now
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -59,4 +100,98 @@
 
     </div>
 </section>
+<script>
+    document.getElementById('openRegisterModal').addEventListener('click', function () {
+        // Open modal when Register button is clicked
+        var teamSize = parseInt(document.getElementById('teamSize').value);
+        var currentCount = parseInt(document.getElementById('currentCount').value);
+        if(currentCount == 1 ){
+            var eventid = document.getElementById('eventId').value;
+            fetch("{% url 'participant_register' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({ event_id: eventid })
+            })
+        }
+        var registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+        registerModal.show();
+    });
+    
+    document.getElementById('addParticipant').addEventListener('click', function () {
+    var name = document.getElementById('participantName').value;
+    var phone = document.getElementById('participantPhone').value;
+    var eventId = document.getElementById('eventId').value;
+    var teamSize = parseInt(document.getElementById('teamSize').value);
+    var currentCount = parseInt(document.getElementById('currentCount').value);
+
+    if (name.trim() === '' || phone.trim() === '') {
+        alert("Please fill all fields.");
+        return;
+    }
+
+    fetch("{% url 'teammate_register' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ name: name, phone: phone, event_id: eventId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            if (currentCount < teamSize) {
+                currentCount++; // Increment count
+                document.getElementById('currentCount').value = currentCount; 
+
+                // Reset input fields for next participant
+                document.getElementById('participantName').value = '';
+                document.getElementById('participantPhone').value = '';
+
+                // Update button text
+                document.getElementById('addParticipant').innerText = `Add Participant ${currentCount}`;
+
+                // Show modal again for next participant
+                var registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+                registerModal.show();
+
+            } else {
+                alert("Registration completed successfully!");
+                location.reload(); // Refresh only after last participant
+            }
+        } else {
+            alert("Something went wrong. Please try again.");
+        }
+    })
+    .catch(error => console.error("Error:", error));
+});
+
+// Skip Button Logic
+document.getElementById('skipBtn').addEventListener('click', function () {
+    var currentCount = parseInt(document.getElementById('currentCount').value);
+    var teamSize = parseInt(document.getElementById('teamSize').value);
+    console.log('skip:',currentCount, teamSize);
+    if (currentCount < teamSize) {
+        currentCount++; // Increment count
+        document.getElementById('currentCount').value = currentCount;
+
+        // Update button text
+        document.getElementById('addParticipant').innerText = `Add Participant ${currentCount}`;
+
+        // Show modal again for next participant
+        var registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+        registerModal.show();
+    } else {
+        alert("All participants added!");
+        location.reload(); // Only refresh after the last participant
+    }
+});
+
+
+    </script>
+    
+    
 {% endblock %}
