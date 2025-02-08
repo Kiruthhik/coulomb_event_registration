@@ -174,7 +174,7 @@ STATIC_URL = '/static/'
 
 # Add this to tell Django where to find static files
 STATICFILES_DIRS = [
-    BASE_DIR / 'event_registration' / 'templates' 
+    BASE_DIR / 'event_registration' / 'templates'/'static'
 ]
 
 # Media files (optional, if you are handling user-uploaded files)

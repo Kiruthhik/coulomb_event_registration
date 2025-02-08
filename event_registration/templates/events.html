@@ -15,7 +15,6 @@
 
     /* Event Card Styling */
     .event-card {
-        background: #ffffff;
         padding: 15px;
         border-radius: 12px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
@@ -56,7 +55,7 @@
     .event-title {
         font-size: 1.3rem;
         font-weight: bold;
-        color: #333;
+        color: white;
         margin: 10px 0;
     }
 
@@ -87,7 +86,7 @@
         <!-- Events Grid -->
         <div class="events-container">
             {% for event in events %}
-            <div class="event-card" id="{{ event.id }}" onclick="window.location.href='/event_detail/{{ event.id }}'">
+            <div class="event-card glassy-background" id="{{ event.id }}" onclick="window.location.href='/event_detail/{{ event.id }}'">
                 <!-- Event Image -->
                 <div class="event-image">
                     <img src="{% static 'assets/img/logo2.png' %}" alt="{{ event.name }}">
