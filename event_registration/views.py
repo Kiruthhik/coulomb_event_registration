@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import event,Participant,teammate
+from django.contrib import messages
 from .forms import ParticipantSignupForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -10,12 +11,18 @@ def complete_profile(request):
     user = request.user
 
     # Create a Participant profile if it doesn't exist
+    if(Participant.objects.filter(user=user).exists()):
+        messages.success(request, "Your profile is complete! You can now register for any event.")
+        return redirect('/')  # Redirect to homepage if profile is already complete
+    
     participant, created = Participant.objects.get_or_create(user=user)
+
 
     if request.method == 'POST':
         form = ParticipantSignupForm(request.POST, instance=participant)
         if form.is_valid():
             form.save()
+            messages.success(request, "Your profile is complete! You can now register for any event.")
             return redirect('/')  # Redirect to homepage after completion
     else:
         form = ParticipantSignupForm(instance=participant)
@@ -35,7 +42,15 @@ def events(request):
 
 def event_detail(request,id):
     event_detail = event.objects.get(id=id)
-    context = {'event':event_detail}
+    registered = False
+    if request.user.is_authenticated:
+        profile = Participant.objects.get(user=request.user)
+        if profile in event_detail.participants.all():
+            registered = True
+    organizer = event_detail.organizers.all()
+    context = {'event':event_detail,
+               'registered':registered,
+               'organizers':organizer}
     return render(request,'event.html',context)
 
 @login_required
@@ -59,8 +74,8 @@ def participant_register(request):
         if not user.is_authenticated:
             return JsonResponse({"status": "error", "message": "User not logged in"})
 
-        event = event.objects.get(id=event_id)
-        event.participants.add(user)
+        event1 = event.objects.get(id=event_id)
+        event1.participants.add(user.participant)
 
         return JsonResponse({"status": "success"})
     
@@ -98,3 +113,15 @@ def teammate_register(request):
         return JsonResponse({"status": "success"})
     
     return JsonResponse({"status": "error", "message": "Invalid request"})
+
+@login_required
+def profile(request):
+    profile = Participant.objects.get(user=request.user)
+    events = profile.events.all()
+    teammates = profile.teammates.all()
+    context = {
+        'profile': profile,
+        'events': events,
+        'teammates': teammates
+    }
+    return render(request,'profile.html',context)

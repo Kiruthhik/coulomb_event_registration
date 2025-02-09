@@ -37,7 +37,7 @@ class event(models.Model):
     
 class organizer(models.Model):
     name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=10)
+    phone = models.CharField(max_length=10,null=True,blank=True)
     event = models.ForeignKey(event,on_delete=models.CASCADE,related_name='organizers')
 
     def __str__(self):

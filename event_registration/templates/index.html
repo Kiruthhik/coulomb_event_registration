@@ -1,69 +1,124 @@
 {% extends 'layout.html' %}
 {% load static %}
+{% load socialaccount %}
 
 {% block title %}Home - Coulomb{% endblock %}
 
 {% block content %}
-    <section class="body-container">
+
+<style>
+    .custom-alert {
+        background: rgba(0, 123, 255, 0.2);  /* Soft transparent blue */
+        color: #fff; /* White text */
+        border-left: 5px solid #007bff; /* Left border accent */
+        backdrop-filter: blur(10px); /* Glassy effect */
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+    }
+    .custom-alert i {
+        margin-right: 8px;
+    }
+    h1.font-style {
+    font-family: 'Old Standard TT', serif;
+    font-weight: 700; /* Use 400 for normal, 700 for bold */
+}
+
+    .sponsor-logos {
+        position: absolute;
+        top: 70px; /* Adjust to fit below navbar */
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+    }
+    .sponsor-logos img {
+        height: 80px;
+        max-width: 150px;
+        object-fit: contain;
+    }
+</style>
+
+<section class="body-container">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success custom-alert" role="alert">
+        <i class="fas fa-check-circle"></i> {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    
+    <!-- Sponsor Logos Section -->
+    <div class="sponsor-logos">
+        <br><br>
+        <img src="{% static 'assets/img/rec.jpg' %}" alt="Sponsor 1">
+        <img src="{% static 'assets/img/seee.jpg' %}" alt="Sponsor 2">
+    </div>
+
     <!-- Masthead -->
     <header class="masthead bg-primary text-white text-center">
         <div class="container d-flex align-items-center flex-column">
-            <!-- Masthead Avatar Image -->
             <img class="masthead-avatar mb-5" src="{% static 'assets/img/logo2.png' %}" alt="..." />
-            <!-- Masthead Heading -->
-            <h1 class="masthead-heading text-uppercase mb-0">EEE Dept presents</h1>
-            <!-- Icon Divider -->
+            <h1 class="masthead-heading text-uppercase mb-0 font-style">EEE Dept presents</h1>
             <div class="divider-custom divider-light">
                 <div class="divider-custom-line"></div>
                 <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                 <div class="divider-custom-line"></div>
             </div>
-            <!-- Masthead Subheading -->
             <p class="masthead-subheading font-weight-light mb-0">Get ready to rumble in the world of wires</p>
-            <br><button class="btn btn-danger btn-lg" onclick="window.location.href=`{% url 'events' %};`>Register Now!</button>
-            <br><a href="{% url 'register' %}" class="link-warning">Already registered?</a>
+            <br><a href="{% url 'events' %}"><button class="btn btn-danger btn-lg">Register Now!</button></a>
+            <br><a href="{% provider_login_url 'google' %}?next=/profile/edit/" class="link-warning">Already registered?</a>
         </div>
     </header>
-
-    <!-- Portfolio Section -->
+    
     <!-- About Section -->
-<section class="page-section bg-light text-dark" id="about">
-    <div class="container">
-        <!-- Section Heading -->
-        <h2 class="page-section-heading text-center text-uppercase text-primary mb-4">About Coulomb</h2>
-        <!-- Icon Divider -->
-        <div class="divider-custom">
-            <div class="divider-custom-line"></div>
-            <div class="divider-custom-icon"><i class="fas fa-bolt text-warning"></i></div>
-            <div class="divider-custom-line"></div>
-        </div>
-
-        <!-- About Content -->
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card shadow-lg border-0 rounded-lg p-4 glassy-background">
-                    <ul class="list-unstyled">
-                        <li class="mb-3">
-                            <i class="fas fa-trophy text-warning"></i>
-                            <strong>COULOMB</strong> is a National Level Symposium conducted annually by the 
-                            <strong>EEE Department of REC</strong>, bringing together tech enthusiasts from across the country.
-                        </li>
-                        <li class="mb-3">
-                            <i class="fas fa-ticket-alt text-success"></i>
-                            Participants can <strong>purchase a coupon</strong> and join multiple events without extra charges.
-                            <br>
-                            <a href="#" class="btn btn-sm btn-primary mt-2">Purchase Coupon</a>
-                        </li>
-                        <li class="mb-3">
-                            <i class="fas fa-users text-danger"></i>
-                            For <strong>team events</strong>, only one member needs to purchase the coupon and 
-                            register by providing their teammates' details.
-                        </li>
-                    </ul>
+    <section class="page-section bg-light text-dark" id="about">
+        <div class="container">
+            <h2 class="page-section-heading text-center text-uppercase text-primary mb-4">About Coulomb</h2>
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-bolt text-warning"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg border-0 rounded-lg p-4 glassy-background">
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="fas fa-trophy text-warning"></i>
+                                <strong>COULOMB</strong> is a National Level Symposium conducted annually by the <strong>EEE Department of REC</strong>, bringing together tech enthusiasts from across the country.
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-ticket-alt text-success"></i>
+                                Participants can <strong>purchase a coupon</strong> and join multiple events without extra charges.
+                                <br>
+                                <a href="#" class="btn btn-sm btn-primary mt-2">Purchase Coupon</a>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-users text-danger"></i>
+                                For <strong>team events</strong>, only one member needs to purchase the coupon and register by providing their teammates' details.
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </section>
-</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            let alerts = document.querySelectorAll(".custom-alert");
+            alerts.forEach(alert => {
+                alert.style.transition = "opacity 1s ease";
+                alert.style.opacity = "0";
+                setTimeout(() => alert.remove(), 1000);
+            });
+        }, 4000);
+    });
+</script>
+
 {% endblock %}

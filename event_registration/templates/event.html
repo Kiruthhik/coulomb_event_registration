@@ -4,6 +4,42 @@
 {% block title %}{{ event.name }} - Coulomb{% endblock %}
 
 {% block content %}
+<style>
+    .glassy-box {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+    }
+    .black-glassy-box {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+    }
+    .modal-content {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(15px);
+        border-radius: 12px;
+        color: white;
+    }
+    .modal-header, .modal-footer {
+        border: none;
+    }
+    .modal-title {
+        color: white;
+    }
+    .form-control {
+        background: rgba(255, 255, 255, 0.3);
+        color: white;
+        border: none;
+    }
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+</style>
 <br><br><br>
 <!-- Registration Modal -->
 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
@@ -35,6 +71,7 @@
     </div>
 </div>
 
+
 <section class="page-section bg-light py-5" id="event-details">
     <div class="container">
         <!-- Event Title -->
@@ -47,57 +84,52 @@
             <div class="divider-custom-line"></div>
         </div>
 
-        <!-- Event Image -->
-       
-
         <!-- Event Details -->
         <div class="row">
             <div class="col-md-8">
                 <h4 class="text-primary">About the Event</h4>
-                <p>{{ event.description }}</p>
+                <p class="text-primary">{{ event.description }}</p>
 
                 <h4 class="text-primary mt-4">Rules & Regulations</h4>
-                <!-- <ul>
-                    {% for rule in event.rules.all %}
-                        <li>{{ rule.text }}</li>
-                    {% endfor %}
-                </ul> -->
-                <p>{{ event.rules_and_regulations|linebreaks }}</p>
+                <div class="glassy-box">
+                    <p>{{ event.rules_and_regulations|linebreaks }}</p>
+                </div>
             </div>
-            <input type="hidden" id="currentCount" value="1">
             <input type="hidden" id="teamSize" value="{{ event.team_size }}">
-
+            <input type="hidden" id="currentCount" value="1">
             <!-- Event Info Sidebar -->
             <div class="col-md-4">
-                <div class="event-info-box p-4 bg-white shadow rounded">
+                <div class="event-info-box p-4 black-glassy-box">
                     <h5 class="text-secondary">Event Details</h5>
                     <p><strong>Date:</strong> {{ event.date }}</p>
                     <p><strong>Time:</strong> {{ event.time }}</p>
                     <p><strong>Venue:</strong> Notified</p>
                     <p><strong>Entry Fee:</strong> 150</p>
 
-                    <h5 class="text-secondary mt-4">Contact</h5>
-                    <p><strong>Organizer:</strong> {{ event.organizer }}</p>
-                    <p><strong>Email:</strong> <a href="mailto:{{ event.contact_email }}">{{ event.contact_email }}</a></p>
-                    <p><strong>Phone:</strong> <a href="tel:{{ event.contact_phone }}">{{ event.contact_phone }}</a></p>
-
+                    <h5 class="text-secondary mt-4">Contact</h5><br>
+                    <p><strong>Organizers:</p>
+                    <ul>
+                        {% for organizer in organizers %}
+                            <li>{{ organizer.name }} - ph {{ organizer.phone }}</li>
+                        {% endfor %}
+                    </ul>
                     <!-- Registration Button -->
                     <div class="text-center mt-4">
-                        {% if user.is_authenticated %}
-                    <!-- Button to trigger modal -->
+                        {% if user.is_authenticated and not registered %}
                             <button class="btn btn-primary" id="openRegisterModal" data-bs-toggle="modal" data-bs-target="#registerModal">
                                 Register
                             </button>
-                        {% else %}
-                            <a href="{% provider_login_url 'google' %}?next={% url 'register' event.id %}" class="btn btn-primary">
-                                Register Now
+                        {% elif not user.is_authenticated %}
+                            <a href="{% url 'register'%}" class="btn btn-primary">
+                                Sign up & Register
                             </a>
+                        {% else %}
+                            <p class="text-success mt-2">You are already registered for this event.</p>
                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </section>
 <script>
@@ -143,7 +175,7 @@
     .then(response => response.json())
     .then(data => {
         if (data.status === "success") {
-            if (currentCount < teamSize) {
+            if (currentCount < teamSize-1) {
                 currentCount++; // Increment count
                 document.getElementById('currentCount').value = currentCount; 
 
@@ -174,7 +206,7 @@ document.getElementById('skipBtn').addEventListener('click', function () {
     var currentCount = parseInt(document.getElementById('currentCount').value);
     var teamSize = parseInt(document.getElementById('teamSize').value);
     console.log('skip:',currentCount, teamSize);
-    if (currentCount < teamSize) {
+    if (currentCount < teamSize-1) {
         currentCount++; // Increment count
         document.getElementById('currentCount').value = currentCount;
 

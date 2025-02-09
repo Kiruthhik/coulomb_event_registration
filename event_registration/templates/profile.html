@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<style>
+    .profile-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+        color: white;
+        border-radius: 12px;
+        padding: 20px;
+    }
+
+    .event-card {
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        color: white;
+        padding: 16px;
+        border-left: 5px solid #ffc107;
+    }
+    .event-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+</style>
+
+<br><br><br>
+<div class="container mt-5">
+    <h2 class="text-center text-primary">My Profile</h2>
+
+    <!-- Profile Card -->
+    <div class="profile-card p-4 shadow rounded mb-4">
+        <h4 class="text-secondary">Welcome, {{user.username}}</h4>
+        <p><strong>Email:</strong> {{user.email}}</p>
+        <p><strong>Phone:</strong> {{profile.whatsapp_number}}</p>
+        <p><strong>Institution:</strong> {{profile.college_name}}</p>
+    </div>
+
+    <!-- Registered Events -->
+    <h3 class="text-center text-primary mt-4">Registered Events</h3>
+    
+    <div class="row">
+        <!-- Sample Event 1 -->
+         {% for event in events %}
+        <div class="col-md-6">
+            <div class="event-card p-3 mb-4" id="{{event.id}}">
+                <h4 class="text-white">{{event.name}}</h4>
+                <p class="text-light"><strong>Date:</strong> {{event.date}}</p>
+                <p class="text-light"><strong>Time:</strong> {{event.time}}</p>
+                {% if teammates|length > 0 %}
+                <h5 class="text-warning mt-3">Teammates:</h5>
+                <ul class="text-white">
+                    {% for teammate in teammates %}
+                    <li>{{teammate.name}}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Sample Event 2 -->
+        <div class="col-md-6">
+            <div class="event-card p-3 mb-4">
+                <h4 class="text-white">Robotics Challenge</h4>
+                <p class="text-light"><strong>Date:</strong> March 12, 2024</p>
+                <p class="text-light"><strong>Time:</strong> 2:00 PM</p>
+                <h5 class="text-warning mt-3">Teammates:</h5>
+                <ul class="text-white">
+                    <li>David Brown</li>
+                    <li>Emily Clark</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".event-card").forEach(card => {
+            card.addEventListener("click", function() {
+                window.location.href = `/event_detail/${card.id}`;
+            });
+        });
+    });
+</script>
+{% endblock %}
