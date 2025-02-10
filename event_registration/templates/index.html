@@ -21,23 +21,27 @@
     .custom-alert i {
         margin-right: 8px;
     }
-    h1.font-style {
-    font-family: 'Old Standard TT', serif;
-    font-weight: 700; /* Use 400 for normal, 700 for bold */
-}
-
-    .sponsor-logos {
-        position: absolute;
-        top: 70px; /* Adjust to fit below navbar */
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        padding: 0 20px;
+    h3.font-style {
+        font-family: 'Old Standard TT', serif;
+        font-weight: 700; /* Use 400 for normal, 700 for bold */
     }
-    .sponsor-logos img {
-        height: 80px;
-        max-width: 150px;
-        object-fit: contain;
+
+    .event-logo {
+        position: absolute;
+        top: 100px; /* Adjust to position below the header */
+        left: 70px; /* Position in the left corner */
+        max-width: 150px; /* Adjust the size dynamically */
+        height: auto;
+    }
+
+    .carousel {
+        width: 80%;
+        margin: auto;
+    }
+    .carousel img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
     }
 </style>
 
@@ -50,18 +54,12 @@
     {% endfor %}
     {% endif %}
     
-    <!-- Sponsor Logos Section -->
-    <div class="sponsor-logos">
-        <br><br>
-        <img src="{% static 'assets/img/rec.jpg' %}" alt="Sponsor 1">
-        <img src="{% static 'assets/img/seee.jpg' %}" alt="Sponsor 2">
-    </div>
-
     <!-- Masthead -->
     <header class="masthead bg-primary text-white text-center">
         <div class="container d-flex align-items-center flex-column">
-            <img class="masthead-avatar mb-5" src="{% static 'assets/img/logo2.png' %}" alt="..." />
-            <h1 class="masthead-heading text-uppercase mb-0 font-style">EEE Dept presents</h1>
+            <h1 class="masthead-heading text-uppercase mb-0">EEE Dept presents</h1><br><br>
+            <h3 class="masthead-heading text-uppercase mb-0 font-style">COULOMB</h3>
+            <h3 class="text-center">2025</h3>
             <div class="divider-custom divider-light">
                 <div class="divider-custom-line"></div>
                 <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
@@ -72,6 +70,11 @@
             <br><a href="{% provider_login_url 'google' %}?next=/profile/edit/" class="link-warning">Already registered?</a>
         </div>
     </header>
+    
+    <!-- Event Logo -->
+     <section>
+        <img src="{% static 'assets/img/logo5.png' %}" alt="Event Logo" class="event-logo">
+     </section>
     
     <!-- About Section -->
     <section class="page-section bg-light text-dark" id="about">
@@ -106,6 +109,35 @@
             </div>
         </div>
     </section>
+
+    <!-- Carousel Section -->
+    <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static 'assets/img/slide1.jpg' %}" class="d-block w-100" alt="Slide 1">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'assets/img/slide2.jpg' %}" class="d-block w-100" alt="Slide 2">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'assets/img/slide3.jpg' %}" class="d-block w-100" alt="Slide 3">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'assets/img/slide4.jpg' %}" class="d-block w-100" alt="Slide 4">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'assets/img/slide5.jpg' %}" class="d-block w-100" alt="Slide 5">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#eventCarousel" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#eventCarousel" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </a>
+    </div>
 </section>
 
 <script>
