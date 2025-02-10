@@ -5,29 +5,32 @@ from .forms import ParticipantSignupForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+
 @login_required
 def complete_profile(request):
-    """ Ensures new users complete their profile after signing up with Google """
+    """Ensures new users complete their profile after signing up with Google"""
     user = request.user
 
-    # Create a Participant profile if it doesn't exist
-    if(Participant.objects.filter(user=user).exists()):
-        messages.success(request, "Your profile is complete! You can now register for any event.")
-        return redirect('/')  # Redirect to homepage if profile is already complete
-    
+    # Check if participant profile exists
     participant, created = Participant.objects.get_or_create(user=user)
 
+    # If the participant exists but their profile is incomplete, show profile_edit.html
+    if not participant.register_number or not participant.college_name:  # Adjust fields based on your model
+        if request.method == 'POST':
+            form = ParticipantSignupForm(request.POST, instance=participant)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Your profile is complete! You can now register for any event.")
+                return redirect('/')  # Redirect to homepage after profile completion
+        else:
+            form = ParticipantSignupForm(instance=participant)
+        return render(request, 'profile_edit.html', {'form': form})  # Stay on profile edit page
 
-    if request.method == 'POST':
-        form = ParticipantSignupForm(request.POST, instance=participant)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Your profile is complete! You can now register for any event.")
-            return redirect('/')  # Redirect to homepage after completion
-    else:
-        form = ParticipantSignupForm(instance=participant)
+    # If profile is already completed, redirect to home with success message
+    messages.success(request, "Your profile is complete! You can now register for any event.")
+    return redirect('/')
 
-    return render(request, 'profile_edit.html', {'form': form})
+
 
 def home(request):
     return render(request,'index.html')
@@ -53,10 +56,6 @@ def event_detail(request,id):
                'organizers':organizer}
     return render(request,'event.html',context)
 
-@login_required
-def profile(request):
-
-    return render(request,'profile.html')
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt

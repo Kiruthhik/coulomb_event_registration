@@ -65,7 +65,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="skipBtn" data-bs-dismiss="modal">Skip</button>
-                <button type="button" class="btn btn-primary" id="addParticipant">Add Participant 1</button>
+                <button type="button" class="btn btn-primary" id="addParticipant">Add Team member 1</button>
             </div>
         </div>
     </div>
@@ -106,11 +106,13 @@
                     <p><strong>Venue:</strong> Notified</p>
                     <p><strong>Entry Fee:</strong> 150</p>
 
-                    <h5 class="text-secondary mt-4">Contact</h5><br>
-                    <p><strong>Organizers:</p>
+                    <h5 class="text-secondary mt-4">Contact Details</h5>
+                    <!-- <p><strong>Organizers:</p> -->
                     <ul>
                         {% for organizer in organizers %}
-                            <li>{{ organizer.name }} - ph {{ organizer.phone }}</li>
+                            <li>Name: {{ organizer.name }} </li>
+                            phone: {{ organizer.phone }} <br>
+
                         {% endfor %}
                     </ul>
                     <!-- Registration Button -->

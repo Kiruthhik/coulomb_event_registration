@@ -40,6 +40,10 @@
 
     <!-- Registered Events -->
     <h3 class="text-center text-primary mt-4">Registered Events</h3>
+
+    {% if events|length == 0 %}
+    <div class="alert alert-warning text-center">You have not registered for any events yet.</div>
+    {% endif %}
     
     <div class="row">
         <!-- Sample Event 1 -->
@@ -61,19 +65,6 @@
         </div>
         {% endfor %}
 
-        <!-- Sample Event 2 -->
-        <div class="col-md-6">
-            <div class="event-card p-3 mb-4">
-                <h4 class="text-white">Robotics Challenge</h4>
-                <p class="text-light"><strong>Date:</strong> March 12, 2024</p>
-                <p class="text-light"><strong>Time:</strong> 2:00 PM</p>
-                <h5 class="text-warning mt-3">Teammates:</h5>
-                <ul class="text-white">
-                    <li>David Brown</li>
-                    <li>Emily Clark</li>
-                </ul>
-            </div>
-        </div>
     </div>
 </div>
 <script>
