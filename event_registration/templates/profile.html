@@ -46,26 +46,30 @@
     {% endif %}
     
     <div class="row">
-        <!-- Sample Event 1 -->
-         {% for event in events %}
+        {% for event in events %}
         <div class="col-md-6">
-            <div class="event-card p-3 mb-4" id="{{event.id}}">
-                <h4 class="text-white">{{event.name}}</h4>
-                <p class="text-light"><strong>Date:</strong> {{event.date}}</p>
-                <p class="text-light"><strong>Time:</strong> {{event.time}}</p>
-                {% if teammates|length > 0 %}
-                <h5 class="text-warning mt-3">Teammates:</h5>
-                <ul class="text-white">
-                    {% for teammate in teammates %}
-                    <li>{{teammate.name}}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
+            <div class="event-card p-3 mb-4" id="{{ event.id }}">
+                <h4 class="text-white">{{ event.name }}</h4>
+                <p class="text-light"><strong>Date:</strong> {{ event.date }}</p>
+                <p class="text-light"><strong>Time:</strong> {{ event.time }}</p>
+    
+                {% with event_teammates=teammates|dictsort:"event.id" %}
+                    {% if event_teammates %}
+                    <h5 class="text-warning mt-3">Teammates:</h5>
+                    <ul class="text-white">
+                        {% for teammate in event_teammates %}
+                            {% if teammate.event == event %}
+                                <li>{{ teammate.name }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                {% endwith %}
             </div>
         </div>
         {% endfor %}
-
     </div>
+    
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
